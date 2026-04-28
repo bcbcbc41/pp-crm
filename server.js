@@ -76,7 +76,7 @@ async function syncTraderAPI(traderId) {
 }
 
 async function processWebhook(p) {
-  const ev=p.event||'unknown', tid=p.trader_id||null, amt=parseFloat(p.sumdep||p.amount||0)||0;
+  const ev=p.event||'unknown', tid=p.trader_id||null, amt=parseFloat(p.sumdep||p.wdr_sum||p.commission||p.amount||0)||0;
   await query('INSERT INTO events (event_type,trader_id,click_id,site_id,cid,ac,sub_id1,sub_id2,sub_id3,sub_id4,sub_id5,country,promo,device_type,os_version,browser,link_type,visitor_id,amount,date_time,raw_payload) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)',
     [ev,tid,p.click_id||null,p.site_id||null,p.cid||null,p.ac||null,p.sub_id1||null,p.sub_id2||null,p.sub_id3||null,p.sub_id4||null,p.sub_id5||null,p.country||null,p.promo||null,p.device_type||null,p.os_version||null,p.browser||null,p.link_type||null,p.visitor_id||null,amt,p.date_time||null,JSON.stringify(p)]);
   if(tid&&ev==='registration'){
